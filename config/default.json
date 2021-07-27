@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://Falcons:Falcons@greenfield.64vuq.mongodb.net/xtown?retryWrites=true&w=majority",
+  "jwtSecret": "Falcons"
+}
