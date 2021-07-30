@@ -1,13 +1,15 @@
 const mongoose = require("mongoose");
 
 const BookmarkSchema = new mongoose.Schema({
+  _id: { type: Number, required: true },
   userID: { type: Number, required: true },
   providerID: { type: Number, required: true },
 });
 
 const CartSchema = new mongoose.Schema({
+  _id: { type: Number, required: true },
   userID: { type: Number, required: true },
-  providerID: { type: Number, required: true },
+  productID: { type: Number, required: true },
   sold: { type: Boolean, required: true },
 });
 
@@ -17,6 +19,7 @@ const CategorySchema = new mongoose.Schema({
 });
 
 const CommentSchema = new mongoose.Schema({
+  _id: { type: Number, required: true },
   userID: { type: Number, required: true },
   postID: { type: Number, required: true },
   text: { type: String, required: true },
@@ -24,23 +27,27 @@ const CommentSchema = new mongoose.Schema({
 });
 
 const GallerySchema = new mongoose.Schema({
+  _id: { type: Number, required: true },
   userID: { type: Number, required: true },
-  Image: { type: String, required: true },
+  image: { type: String, required: true },
 });
 
 const PostSchema = new mongoose.Schema({
+  _id: { type: Number, required: true },
   userID: { type: Number, required: true },
   date: { type: Date, default: Date.now, required: true },
   text: { type: String, required: true },
-  Image: { type: String, required: true },
+  image: { type: String, required: true },
 });
 
 const LikeSchema = new mongoose.Schema({
+  _id: { type: Number, required: true },
   userID: { type: Number, required: true },
   postID: { type: Number, required: true },
 });
 
 const ProductSchema = new mongoose.Schema({
+  _id: { type: Number, required: true },
   name: { type: String, required: true },
   category: { type: String, required: true },
   price: { type: Number, required: true },
@@ -51,22 +58,24 @@ const ProductSchema = new mongoose.Schema({
 });
 
 const ReviewSchema = new mongoose.Schema({
+  _id: { type: Number, required: true },
   userID: { type: Number, required: true },
   providerID: { type: Number, required: true },
   text: { type: String, required: true },
   rating: { type: String, default: "0", required: true },
-  picture: { type: String, default: null, required: true },
+  pic: { type: String, default: null, required: true },
   date: { type: Date, default: Date.now, required: true },
 });
 
 const RoleSchema = new mongoose.Schema({
   _id: { type: Number, required: true },
-  role: { type: String, required: true },
+  Role: { type: String, required: true },
 });
 
 const UserSchema = new mongoose.Schema({
+  _id: { type: Number, required: true },
   username: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   RoleID: { type: Number, default: 3 },
   mobile: { type: Number, default: null },

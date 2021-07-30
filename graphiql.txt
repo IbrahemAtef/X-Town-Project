@@ -26,6 +26,7 @@ mutation {
 // login
 mutation {
   login(email:"ahmed@gmail.com", password:"123456"){
+    id
     username
     email
     RoleID
@@ -34,7 +35,7 @@ mutation {
 
 //delete user
 mutation {
-  deleteUser(id: "6102710f40f26129fca6bd91") {
+  deleteUser(id: 2) {
     username
     email
     RoleID
@@ -43,16 +44,262 @@ mutation {
 
 // update user
 mutation {
-  editUser(id: "6102710f40f26129fca6bd91",username:"Ibrahim", email:"Ibrahim@gmail.com"){
+  editUser(id: "1",username:"Ibrahim", email:"Ibrahim@gmail.com"){
     id
   }
 }
 
 // add product
 mutation{
-  addProduct(name:"phone", category:"electronic", price:100, userID:"6102710f40f26129fca6bd91", rating:"4", quantity:1, pic:""){
+  addProduct(name:"phone", category:"electronic", price:100, userID:"1", rating:"4", quantity:1, pic:""){
     id
   }
 }
+
+// delete product 
+mutation{
+  deleteProduct(id:1){
+    id
+  }
+}
+
+// edit product
+mutation{
+  editProduct(name:"phone",id:1){
+    id
+  }
+}
+
+// add cart
+
+mutation{
+  addCart(userID:1, productID:1,sold:true){
+    id
+    userID
+    productID
+    sold
+  }
+}
+
+// delete cart 
+mutation{
+  deleteCart(id:1){
+    id
+    userID
+    productID
+    sold
+  }
+}
+
+// edit cart
+mutation{
+  editCart(id:1, sold:false){
+    id
+    userID
+    productID
+    sold
+  }
+}
+
+// add like
+mutation{
+  addLike(userID:1, postID:1){
+    id
+    userID
+    postID
+  }
+}
+
+// delete like
+mutation{
+  deleteLike(id: 2){
+   id
+  }
+}
+
+// add comment
+mutation{
+  addComment(userID:1, postID:1, text:"greate"){
+    id
+    userID
+    postID
+    text
+    date
+    user{
+      username
+    }
+  }
+}
+
+// delete comment 
+mutation{
+  deleteComment(id: 2){
+   id
+  }
+}
+
+// edit comment
+mutation{
+  editComment(id: 1,text:"fantastic"){
+   id
+    text
+  }
+}
+
+// add post
+mutation{
+  addPost(userID: 1,text:"asd", image:"ghdj"){
+    id
+    userID
+    date
+    text
+    image
+    user{
+      username
+    }
+  }
+} 
+
+// delete post
+mutation{
+  deletePost(id: 2){
+    id
+    userID
+    date
+    text
+    image
+    user{
+      username
+    }
+  }
+}
+
+// edit post
+mutation{
+  editPost(id: 1,text:"qwe", image:""){
+    id
+    userID
+    date
+    text
+    image
+    user{
+      username
+    }
+  }
+}
+
+// add caterogy
+mutation{
+  addCategory(category: "phones"){
+    id
+    category
+  }
+}
+
+// delete category
+mutation{
+  deleteCategory(id: 1){
+    id
+    category
+  }
+}
+
+// edit category
+mutation{
+  editCategory(id:2, category:"phones"){
+    id
+    category
+  }
+}
+
+// add gallery
+mutation{
+  addGallery(userID:1, image:"asd"){
+    id
+    userID
+    image
+  }
+}
+
+// delete gallery
+mutation{
+  deleteGallery(id:2){
+    id
+    userID
+    image
+  }
+}
+
+// edit gallery
+mutation{
+  editGallery(id:1, image:"weq"){
+    id
+    userID
+    image
+  }
+}
+
+// add bookmark
+mutation{
+  addBookmark(userID:1, providerID:1){
+    id
+    userID
+    providerID
+    provider{
+      username
+    }
+  }
+}
+
+// delete bookmark 
+mutation{
+  deleteBookmark(id:2){
+    id
+  }
+}
+
+// add role
+mutation {
+  addRole(Role:"user"){
+    id
+    Role
+  }
+}
+
+// delete role 
+mutation {
+  deleteRole(id:4){
+    id
+    Role
+  }
+}
+
+
+// edit role
+mutation {
+  editRole(id:4, Role:"asd"){
+    id
+    Role
+  }
+}
+
+// add review
+mutation {
+  addReview(userID:1, providerID:1, text:"greate", rating:"4", pic:"sad"){
+    id
+    userID
+    providerID
+    text
+    rating
+    pic
+    date
+    user{
+      username
+      email
+    }
+  }
+}
+
+
 
 

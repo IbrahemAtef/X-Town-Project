@@ -66,7 +66,7 @@ const UserType = new GraphQLObjectType({
         //   .select()
         //   .where({ id: root.categoryID })
         //   .first();
-        return await CategoryModel.findOne({ id: root.categoryID }); // maybe need to take the first index
+        return await CategoryModel.findOne({ _id: root.categoryID }); // maybe need to take the first index
       },
     },
   }),
@@ -131,7 +131,7 @@ const CommentType = new GraphQLObjectType({
       type: UserType,
       async resolve(root, args) {
         // return await knex('user').select().where({ id: root.userID }).first();
-        return await UserModel.findOne({ id: root.userID });
+        return await UserModel.findOne({ _id: root.userID });
       },
     },
   }),
@@ -149,7 +149,7 @@ const PostType = new GraphQLObjectType({
       type: UserType,
       async resolve(root, args) {
         // return await knex('user').select().where({ id: root.userID }).first();
-        return await UserModel.findOne({ id: root.userID });
+        return await UserModel.findOne({ _id: root.userID });
       },
     },
   }),
@@ -177,7 +177,7 @@ const bookmarkType = new GraphQLObjectType({
         //   .select()
         //   .where({ id: root.providerID })
         //   .first();
-        return await UserModel.findOne({ id: root.providerID });
+        return await UserModel.findOne({ _id: root.providerID });
       },
     },
   }),
@@ -205,7 +205,7 @@ const reviewType = new GraphQLObjectType({
       type: UserType,
       async resolve(root, args) {
         // return await knex('user').select().where({ id: root.userID }).first();
-        return await UserModel.findOne({ id: root.userID });
+        return await UserModel.findOne({ _id: root.userID });
       },
     },
   }),
@@ -395,7 +395,7 @@ const RootQuery = new GraphQLObjectType({
         //   .select('category')
         //   .where({ id: args.categoryID })
         //   .first();
-        return await CategoryModel.findOne({ id: args.categoryID });
+        return await CategoryModel.findOne({ _id: args.categoryID });
       },
     },
     getReviews: {
@@ -491,6 +491,7 @@ const Mutation = new GraphQLObjectType({
       async resolve(root, args) {
         // add user with crpted password to database
         args.password = await bcrypt.hash(args.password, 10);
+        args._id = await UserModel.countDocuments() + 1;
         // return await knex('user').insert(args);
         const user = new UserModel(args);
         return await user.save();
@@ -550,6 +551,7 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("product").insert(args);
+        args._id = await ProductModel.countDocuments() + 1;
         const product = new ProductModel(args);
         return await product.save();
       },
@@ -561,6 +563,7 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("product").where({ id: args.id }).del();
+        return await ProductModel.deleteOne({_id: args.id});
       },
     },
     editProduct: {
@@ -590,6 +593,9 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("cart").insert(args);
+        args._id = await CartModel.countDocuments() + 1;
+        const cart = new CartModel(args);
+        return await cart.save();
       },
     },
     deleteCart: {
@@ -599,6 +605,7 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("cart").where({ id: args.id }).del();
+        return await CartModel.deleteOne({_id: args.id});
       },
     },
     editCart: {
@@ -611,6 +618,7 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("cart").where({ id: args.id }).update(args);
+        return await CartModel.updateOne({_id: args.id},args);
       },
     },
     //for like table
@@ -622,6 +630,9 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("likes").insert(args);
+        args._id = await LikeModel.countDocuments() + 1;
+        const like = new LikeModel(args);
+        return await like.save();
       },
     },
 
@@ -632,6 +643,7 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("likes").where({ id: args.id }).del();
+        return await LikeModel.deleteOne({_id: args.id});
       },
     },
 
@@ -642,10 +654,13 @@ const Mutation = new GraphQLObjectType({
         userID: { type: new GraphQLNonNull(GraphQLID) },
         postID: { type: new GraphQLNonNull(GraphQLID) },
         text: { type: new GraphQLNonNull(GraphQLString) },
-        date: { type: new GraphQLNonNull(GraphQLString) },
+        date: { type: GraphQLString }, // should we remove it
       },
       async resolve(root, args) {
         // return await knex("comment").insert(args);
+        args._id = await CommentModel.countDocuments() + 1;
+        const comment = new CommentModel(args);
+        return await comment.save();
       },
     },
     deleteComment: {
@@ -655,6 +670,7 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("comment").where({ id: args.id }).del();
+        return await CommentModel.deleteOne({_id: args.id});
       },
     },
     editComment: {
@@ -667,6 +683,7 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("comment").where({ id: args.id }).update(args);
+        return await CommentModel.updateOne({_id: args.id},args);
       },
     },
     // for post table
@@ -674,12 +691,15 @@ const Mutation = new GraphQLObjectType({
       type: PostType,
       args: {
         userID: { type: new GraphQLNonNull(GraphQLID) },
-        date: { type: new GraphQLNonNull(GraphQLString) },
+        date: { type: GraphQLString },
         text: { type: new GraphQLNonNull(GraphQLString) },
         image: { type: new GraphQLNonNull(GraphQLString) },
       },
       async resolve(root, args) {
         // return await knex("post").insert(args);
+        args._id = await PostModel.countDocuments() + 1;
+        const post = new PostModel(args);
+        return await post.save();
       },
     },
     deletePost: {
@@ -689,6 +709,7 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("post").where({ id: args.id }).del();
+        return await PostModel.deleteOne({_id: args.id});
       },
     },
     editPost: {
@@ -702,6 +723,7 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("post").where({ id: args.id }).update(args);
+        return await PostModel.updateOne({_id: args.id},args);
       },
     },
     addCategory: {
@@ -711,6 +733,9 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("category").insert(args);
+        args._id = await CategoryModel.countDocuments() + 1;
+        const category = new CategoryModel(args);
+        return await category.save();
       },
     },
     deleteCategory: {
@@ -720,6 +745,7 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("category").where(args).del();
+        return await CategoryModel.deleteOne({_id: args.id});
       },
     },
     editCategory: {
@@ -730,6 +756,7 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("category").where({ id: args.id }).update(args);
+        return await CategoryModel.updateOne({_id: args.id},args);
       },
     },
     addGallery: {
@@ -740,6 +767,9 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("gallery").insert(args);
+        args._id = await GalleryModel.countDocuments() + 1;
+        const gallery = new GalleryModel(args);
+        return await gallery.save();
       },
     },
     deleteGallery: {
@@ -749,17 +779,19 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("gallery").where(args).del();
+        return await GalleryModel.deleteOne({_id: args.id});
       },
     },
     editGallery: {
       type: GalleryType,
       args: {
         id: { type: new GraphQLNonNull(GraphQLID) },
-        userID: { type: new GraphQLNonNull(GraphQLID) },
-        image: { type: new GraphQLNonNull(GraphQLString) },
+        userID: { type: GraphQLID },
+        image: { type: GraphQLString },
       },
       async resolve(root, args) {
         // return await knex("gallery").where({ id: args.id }).update(args);
+        return await GalleryModel.updateOne({_id: args.id},args);
       },
     },
     addBookmark: {
@@ -770,6 +802,9 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("bookmark").insert(args);
+        args._id = await BookmarkModel.countDocuments() + 1;
+        const bookmark = new BookmarkModel(args);
+        return await bookmark.save();
       },
     },
     deleteBookmark: {
@@ -779,6 +814,7 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("bookmark").where(args).del();
+        return await BookmarkModel.deleteOne({_id: args.id});
       },
     },
     addRole: {
@@ -788,18 +824,22 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("roles").insert(args);
+        args._id = await RoleModel.countDocuments() + 1;
+        const role = new RoleModel(args);
+        return await role.save();
       },
     },
-    deleteRoles: {
+    deleteRole: {
       type: rolesType,
       args: {
         id: { type: new GraphQLNonNull(GraphQLID) },
       },
       async resolve(root, args) {
         // return await knex("roles").where(args).del();
+        return await RoleModel.deleteOne({_id: args.id});
       },
     },
-    editRoles: {
+    editRole: {
       type: rolesType,
       args: {
         id: { type: GraphQLNonNull(GraphQLID) },
@@ -807,6 +847,7 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(root, args) {
         // return await knex("roles").where({ id: args.id }).update(args);
+        return await RoleModel.updateOne({_id: args.id},args);
       },
     },
     addReview: {
@@ -815,12 +856,15 @@ const Mutation = new GraphQLObjectType({
         providerID: { type: new GraphQLNonNull(GraphQLID) },
         userID: { type: new GraphQLNonNull(GraphQLID) },
         text: { type: new GraphQLNonNull(GraphQLString) },
-        date: { type: new GraphQLNonNull(GraphQLString) },
+        date: { type: GraphQLString },
         rating: { type: new GraphQLNonNull(GraphQLString) },
         pic: { type: new GraphQLNonNull(GraphQLString) },
       },
       async resolve(root, args) {
         // return await knex("review").insert(args);
+        args._id = await ReviewModel.countDocuments() + 1;
+        const review = new ReviewModel(args);
+        return await review.save();
       },
     },
   },
@@ -830,3 +874,12 @@ module.exports = new GraphQLSchema({
   query: RootQuery,
   mutation: Mutation,
 });
+
+
+
+
+
+/*
+what if i delete a user his id is 2 and there is a 3 user and then add another one 
+should the new one take the id 4 or 3 and the user of id 3 should take the place of 2
+*/
