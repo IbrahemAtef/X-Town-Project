@@ -294,12 +294,12 @@ const RootQuery = new GraphQLObjectType({
       },
     },
     ////////********* review it to check if it's needed and compare between it and get users*************/
-    usersByCategory: {
-      type: new GraphQLList(UserType),
-      args: {
-        category: { type: new GraphQLNonNull(GraphQLString) },
-      },
-      async resolve(parent, args) {
+    // usersByCategory: {
+    //   type: new GraphQLList(UserType),
+    //   args: {
+    //     category: { type: new GraphQLNonNull(GraphQLString) },
+    //   },
+    //   async resolve(parent, args) {
         // try {
         //   var categoryData = await knex('category')
         //     .select()
@@ -311,8 +311,8 @@ const RootQuery = new GraphQLObjectType({
         // } catch (err) {
         //   return err;
         // }
-      },
-    },
+      // },
+    // },
     // ( check if we need it)
     // category: {
     //   type: CategoryType,
