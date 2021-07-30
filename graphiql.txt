@@ -1,0 +1,58 @@
+// add User 
+mutation {
+  addUser(username:"ahmed", email:"ahmed@gmail.com",password:"123456"){
+    id
+    username
+    email
+    password
+    RoleID
+    payService
+    mobile
+    serviceName
+    location
+    address
+    avatar
+    cover
+    thumbnail
+    video
+    description
+    workingHours
+    facilities
+    categoryID
+    token
+  }
+}
+
+// login
+mutation {
+  login(email:"ahmed@gmail.com", password:"123456"){
+    username
+    email
+    RoleID
+  }
+}
+
+//delete user
+mutation {
+  deleteUser(id: "6102710f40f26129fca6bd91") {
+    username
+    email
+    RoleID
+  }
+}
+
+// update user
+mutation {
+  editUser(id: "6102710f40f26129fca6bd91",username:"Ibrahim", email:"Ibrahim@gmail.com"){
+    id
+  }
+}
+
+// add product
+mutation{
+  addProduct(name:"phone", category:"electronic", price:100, userID:"6102710f40f26129fca6bd91", rating:"4", quantity:1, pic:""){
+    id
+  }
+}
+
+
